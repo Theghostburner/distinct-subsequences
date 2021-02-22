@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int countSub(string s,int* dp)
+{
+    int mod = 1000000007;
+    dp[0] = 1;
+    unordered_map<char,int> m;
+    
+    for(int i=1;i<=s.size();i++)
+    {
+        if(m.find(s[i-1]) != m.end())
+        {          
+            dp[i]=(2*(dp[i-1])%mod-m[s[i-1]]%mod)%mod;
+            dp[i] = (dp[i] + mod)%mod;
+            m[s[i-1]] = dp[i-1];
+        }
+        else
+        {
+            m[s[i-1]] = dp[i-1];
+            dp[i] = (2*(dp[i-1])%mod)%mod;
+        }
+    }
+    return dp[s.size()];
+}
+
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        string s;
+        cin>>s;
+        int n = s.size();
+        int* dp = new int[n+1];    
+        int ans = countSub(s,dp);
+        cout<<ans<<endl;
+    }
+    return 0;
+}
